@@ -40,3 +40,7 @@ services:
             - "@doctrine.orm.default_entity_manager"
         tags:
             - { name: console.command }
+
+    AppBundle\DataFixtures\:
+        resource: '../../src/AppBundle/DataFixtures'
+        tags: ['doctrine.fixture.orm']

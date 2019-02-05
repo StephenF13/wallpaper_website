@@ -22,6 +22,13 @@ class Wallpaper
     private $id;
 
     /**
+     * Many Wallpaper have One Category.
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $category;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="filename", type="string", length=255)
@@ -154,6 +161,24 @@ class Wallpaper
     public function getHeight()
     {
         return $this->height;
+    }
+
+    /**
+     * @return Category|null
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     * @return Wallpaper
+     */
+    public function setCategory(Category $category = null)
+    {
+        $this->category = $category;
+        return $this;
     }
 }
 
