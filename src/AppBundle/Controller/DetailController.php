@@ -2,19 +2,20 @@
 
 namespace AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 class DetailController extends Controller
 {
     /**
      * @Route("/view", name="view")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        $image = '01.JPG';
-
-        return $this->render('detail/index.html.twig', ['image' => $image]);
+        $image = 'landscape-summer-beach.jpg';
+        return $this->render('detail/index.html.twig', [
+            'image' => $image,
+        ]);
     }
 }

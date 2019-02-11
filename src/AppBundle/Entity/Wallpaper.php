@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Entity\Traits\Timestampable;
+use AppBundle\Model\FileInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,9 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="wallpaper")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\WallpaperRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Wallpaper
 {
+    use Timestampable;
     /**
      * @var int
      *
@@ -20,42 +24,40 @@ class Wallpaper
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
     /**
      * Many Wallpaper have One Category.
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
-
+    /**
+     * @var FileInterface
+     */
+    private $file;
     /**
      * @var string
      *
      * @ORM\Column(name="filename", type="string", length=255)
      */
     private $filename;
-
     /**
      * @var string
      *
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
      */
     private $slug;
-
     /**
      * @var int
      *
      * @ORM\Column(name="width", type="integer")
      */
     private $width;
-
     /**
      * @var int
      *
      * @ORM\Column(name="height", type="integer")
      */
     private $height;
-
 
     /**
      * Get id
@@ -68,6 +70,45 @@ class Wallpaper
     }
 
     /**
+     * @return Category|null
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     * @return Wallpaper
+     */
+    public function setCategory(Category $category = null)
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    /**
+     * @return FileInterface
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param FileInterface|null $file
+     * @return Wallpaper
+     */
+    public function setFile(FileInterface $file = null)
+    {
+        $this->file = $file;
+        if ($file) {
+            $this->setUpdatedAt();
+        }
+        return $this;
+    }
+
+    /**
      * Set filename
      *
      * @param string $filename
@@ -77,7 +118,6 @@ class Wallpaper
     public function setFilename($filename)
     {
         $this->filename = $filename;
-
         return $this;
     }
 
@@ -101,7 +141,6 @@ class Wallpaper
     public function setSlug($slug)
     {
         $this->slug = $slug;
-
         return $this;
     }
 
@@ -125,7 +164,6 @@ class Wallpaper
     public function setWidth($width)
     {
         $this->width = $width;
-
         return $this;
     }
 
@@ -149,7 +187,6 @@ class Wallpaper
     public function setHeight($height)
     {
         $this->height = $height;
-
         return $this;
     }
 
@@ -164,21 +201,15 @@ class Wallpaper
     }
 
     /**
-     * @return Category|null
+     * @return string
      */
-    public function getCategory()
+    public function __toString()
     {
-        return $this->category;
+        return $this->filename;
     }
 
-    /**
-     * @param Category $category
-     * @return Wallpaper
-     */
-    public function setCategory(Category $category = null)
+    public function getImage()
     {
-        $this->category = $category;
-        return $this;
+        return $this->filename;
     }
 }
-

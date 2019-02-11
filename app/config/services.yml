@@ -44,3 +44,27 @@ services:
     AppBundle\DataFixtures\:
         resource: '../../src/AppBundle/DataFixtures'
         tags: ['doctrine.fixture.orm']
+
+    AppBundle\Service\LocalFilesystemFileMover:
+        arguments:
+            - "@filesystem"
+
+    AppBundle\Service\WallpaperFilePathHelper:
+        arguments:
+            - "%kernel.project_dir%/web/images/"
+
+    AppBundle\Service\LocalFilesystemFileDeleter:
+        arguments:
+            - '@filesystem'
+            - '%kernel.project_dir%/web/images/'
+
+    AppBundle\Event\Listener\WallpaperListener:
+        arguments:
+            - '@AppBundle\Service\LocalFilesystemFileMover'
+            - '@AppBundle\Service\WallpaperFilePathHelper'
+            - '@AppBundle\Service\ImageFileDimensionsHelper'
+            - '@AppBundle\Service\LocalFilesystemFileDeleter'
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate }
+            - { name: doctrine.event_listener, event: preRemove }
